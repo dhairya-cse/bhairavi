@@ -28,9 +28,9 @@ Note: Mounting the volume `pretrained_models` allows to download the `spleeter` 
 Running this generates the following files for every song required for the web application:
 
 1. `acmp.mp3`: Instrument tracks to play along
-2. `vocals.mp3`: The singers vocals, on which pitch analysis is performed.
+2. `vocals.mp3`: The singers vocals (without any instruments, extracted using essentia), on which pitch analysis is performed.
 3. `tonic`: The original tonic of the song.
-4. `semitone.gz`: The semtione curve of the song.
+4. `semitone.gz`: The semtione curve of the vocals.
 5. `energy.gz`: Energy curve of the vocals
 6. `parts.json`: Timestamps for different minimum 30 second parts of the songs such that the silences between parts is atleast 1 second.
 
