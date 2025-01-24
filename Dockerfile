@@ -2,8 +2,8 @@ FROM python:3.8.20-slim
 
 WORKDIR /tmp
 
-COPY ./requirement.txt .
-RUN pip install -r requirement.txt
+COPY ./requirements.txt .
+RUN pip install -r requirements.txt
 
 COPY ./web /app/web
 COPY ./wasm /app/wasm

@@ -36,7 +36,6 @@ def create_app():
     else:
         app.config['SEND_FILE_MAX_AGE_DEFAULT'] = CACHE_TIMEOUT
 
-    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
     app.config['TEMPLATES_AUTO_RELOAD'] = True
     app.jinja_env.add_extension('jinja2.ext.do')
 
