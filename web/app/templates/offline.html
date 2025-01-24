@@ -1,0 +1,66 @@
+{%- import "backend/macros.html" as macros -%}
+{%- extends "backend/base.html" -%}
+
+
+<!-- Provide variable to other files, specify scripts to be downloaded with the app -->
+{%- block prepare -%}
+    {{super()}}
+    {%- set gj.render_head=render_head -%}
+    {%- set gj.render_main_screen=render_main_screen -%}
+    {%- set gj.render_end=render_end -%}
+{%- endblock -%}
+
+
+<!-- To add something in head specific to the page -->
+{% macro render_head() -%}
+            
+{% endmacro %}
+
+
+
+<!-- Render the main view port -->
+{% macro render_main_screen() -%}
+
+<div class="w3-container w3-display-middle w3-center w3-mobile" style="width: fit-content;">
+    <h4>No connection...</h4>
+    <p>The application requires internet connection. Please check your internet connection and try again.</p>
+    <button class="w3-button w3-teal w3-hover-teal w3-display-center w3-ripple" onclick="window.location.href='/'">Reload</button>
+</div>
+
+{% endmacro %}
+
+
+<!-- Specify the scripts to be loaded with promises, the entry point is defined in ${file}.js for ${file}.html -->
+{% macro render_end() -%}
+    <script>
+        
+        window.addEventListener('online', async () => {
+            flasher.success("Connected...")
+            await sleep(1000);
+            window.location.href = "/";
+        });
+
+        id = setInterval(async function(){
+            try{
+                let response= await fetch("/", {method: 'HEAD'});
+                console.warn("Not connected to internet");
+                if (response.status >= 200 && response.status < 500){
+                    flasher.success("Connected...")
+                    await sleep(1000);
+                    window.location.href = "/";
+                    clearInterval(id);
+                }
+            }
+            catch{
+
+            }
+        },3000);
+        
+
+        state.default_screen = "";
+
+        scripts_to_load=[
+            
+        ];
+    </script>
+{% endmacro %}

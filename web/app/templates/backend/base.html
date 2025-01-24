@@ -1,0 +1,116 @@
+{%- import "backend/macros.html" as macros -%}
+
+{%- set gj =namespace() -%}
+
+{%- block prepare -%}
+    {%- set gj.render_head= macros.empty -%}
+    {%- set gj.render_main_screen = macros.empty -%}
+    {%- set gj.render_end = macros.empty -%}
+{%- endblock -%}
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Bhairavi</title>
+        <meta name="viewport" content="width=device-width, height=600, initial-scale=0.9,minimum-scale=0.9,maximum-scale=0.9,shrink-to-fit=no">
+
+        <!-- Linking Important files -->    
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" crossorigin="anonymous">
+        
+        
+        <!-- iOS -->
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-title" content="Hemavathi">
+        <meta name="format-detection"  content="telephone=no">
+        <link rel="apple-touch-icon" sizes="180x180" href="static/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="static/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="static/favicon/favicon-16x16.png">
+        
+        <link rel="manifest" href="/manifest">
+        <script src="static/JS/default.js"></script>
+        
+        <style>
+            a:link {
+                text-decoration: none;
+            }
+            a:visited {
+                text-decoration: none;
+            }
+        </style>
+
+        <script>
+            const state = {}
+            messages = [];
+            
+            USE_SERVICE_WORKER = true;
+
+            if (USE_SERVICE_WORKER &&'serviceWorker' in navigator) {
+                navigator.serviceWorker
+                .register('/service_worker.js')
+                .then(function(registration) {
+                    console.log('Service Worker Registered!');
+                    return registration;
+                })
+                .catch(function(err) {
+                console.warn('Unable to register service worker.',err);
+                console.info("Site will still work as usual");
+                });
+            }
+
+        </script>
+
+        {{gj.render_head()|indent}}
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category,message in messages %}
+                {{macros.render_message(message,category)|indent(8)}}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        
+    </head>
+    
+    <body class="w3-black w3-animate-opacity">
+        <Header class="w3-container w3-teal">
+            <div class="w3-cell">
+                <a href="/"><h1>Bhairavi</h1></a>
+            </div>
+
+            <div class="w3-display-topright w3-cell w3-rest" >
+                <div class="w3-padding w3-right">
+                    <a href="/"><img alt="IITM Logo" style="width: 1.5cm;" class="w3-image" src="https://upload.wikimedia.org/wikipedia/en/thumb/6/69/IIT_Madras_Logo.svg/1200px-IIT_Madras_Logo.svg.png"></a>
+                </div>
+            </div>
+        </Header>
+        
+
+        <div id="main">
+            <div id="waiting_screen" class="w3-display-container w3-mobile w3-display-middle w3-opacity w3-white w3-animate-opacity" style="width: 50%;height: 50%;display: none;">
+                <p id="waiting_screen_message" class="w3-center">Please wait...</p>
+                <p><i class="w3-xlarge w3-spin fa fa-refresh w3-display-middle"></i></p>
+            </div>
+
+            {{gj.render_main_screen()|indent}}
+        </div>
+
+        <div class="w3-display-container">
+            <div id="flash_area" class=" w3-container w3-mobile w3-display-topmiddle  w3-center" style="width: 70vw;">
+            </div>
+        </div>
+
+
+        <footer class="w3-container w3-mobile w3-teal w3-display-bottommiddle" style="width: 100%;">
+                <a href="/" class="w3-button w3-teal w3-ripple w3-hover-teal">Home</a>
+                <a href="/help" class="w3-button w3-teal w3-ripple w3-hover-teal">Help</a>
+                <a href="mailto:dhairya.cse@gmail.com" class="w3-button w3-teal w3-ripple w3-hover-teal">Feedback</a>
+        </footer>
+        
+
+        {{gj.render_end()|indent}}
+        
+    </body>
+</html>

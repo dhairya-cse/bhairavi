@@ -1,0 +1,81 @@
+{%- import "backend/macros.html" as macros -%}
+{%- extends "backend/base.html" -%}
+
+
+<!-- Provide variable to other files, specify scripts to be downloaded with the app -->
+{%- block prepare -%}
+    {{super()}}
+    {%- set gj.render_head=render_head -%}
+    {%- set gj.render_main_screen=render_main_screen -%}
+    {%- set gj.render_end=render_end -%}
+{%- endblock -%}
+
+
+<!-- To add something in head specific to the page -->
+{% macro render_head() -%}
+            
+{% endmacro %}
+
+
+
+<!-- Render the main view port -->
+{% macro render_main_screen() -%}
+<div id="help_screen" class="w3-container w3-display-middle w3-mobile"style="overflow-x:auto;width:80%;height:70%">
+    <h4>1. Guide to use the site</h4>
+    <ol>
+        <li>
+            Go to site <a href="/" class="w3-text-teal">home</a> and browse through the available songs using the drop down menus. Though the application is designed to be use for carnatic music, I have added some Bollywood and Telugu songs for those who aren't exposed to caranatic music.
+        </li>
+        <li>
+            Select a tonic. The original tonic value is provided to you by default when you select a song. You can tune the tonic(frequency in Hz) in which you want to sing the song. 
+            Use this <a href="https://pages.mtu.edu/~suits/notefreqs.html" class="w3-text-teal">chart</a> to get an idea about which frequency to use.
+        </li>
+        <li>
+            Click next button. Listen to the original song and give access to your microphone.
+        </li>
+        <li>
+            Click record button and sing along the audio for the song. A red circle displayed on the screen indicates your current pitch to help you be in sync. Scores will be displayed after the song is over. If you click stop button in between (>=1 min), the score will be caluclated only for the finished part. 
+        </li>
+        <li>
+            Click home button in the bottom left to give an another try. Also It would be great help if you can take a small <a href="https://forms.gle/XXYhcviV4V62C8fB8" class="w3-text-teal">survey</a> to help me benchmark the application.
+        </li>
+    </ol>
+    <h4>2. Recommonded environement</h4>
+    <ol>
+        <li>Use the application with your headset on.</li>
+        <li>Use a good quality microphone to ensure the best results.</li>
+        <li>Sit in a quite place while recording.</li>
+        <li>Use a desktop browser for the best experiqence.</li>
+    </ol>
+    <h4>3. Known limitations</h4>
+    <ol>
+        <li>
+            The application performs some CPU intensive operations on client side (i.e. your machine), therefore it may take 3 to 30 seconds of startup time. 
+        </li>
+        <li>
+            Some low power devices (espically smartphones) may show some delay for real time pitch indicator. There is also a possiblity of some audio glitches (harsh clicking noise) on such devices.
+        </li>
+        <li>
+            We have used automatic methods to generate the pitch curve. These methods do the job best but aren't perfect, therefore you may notice some missing portion or octave errors (say tone C5 is palyed where C4 was expected). 
+        </li>
+    </ol>
+
+    <h4>Acknowledgement</h4>
+    <p>
+        This is to acknowledge that all the songs used on the site are for illustration purpose and are intellectual property of the owners. The application doesn't intend to make any profit out of it. Contact <a href="mailto:dhairya.cse@gmail.com" class="w3-text-teal">dhairya.cse@gmail.com</a> for the removal of any song.
+    </p>
+     
+</div>
+{% endmacro %}
+
+
+<!-- Specify the scripts to be loaded with promises, the entry point is defined in ${file}.js for ${file}.html -->
+{% macro render_end() -%}
+    <script>
+        state.default_screen = "help_screen";
+
+        scripts_to_load=[
+
+        ];
+    </script>
+{% endmacro %}

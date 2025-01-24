@@ -1,0 +1,199 @@
+{%- import "backend/macros.html" as macros -%}
+{%- extends "backend/base.html" -%}
+
+
+<!-- Provide variable to other files -->
+{%- block prepare -%}
+    {{super()}}
+    {%- set gj.render_head=render_head -%}
+    {%- set gj.render_main_screen=render_main_screen -%}
+    {%- set gj.render_end=render_end -%}
+{%- endblock -%}
+
+
+<!-- To add something in head specific to the page -->
+{% macro render_head() -%}
+            <script>
+                function toFixedPoint(ele){
+                    let num = Number(document.getElementById(ele).value);
+                    return document.write(num.toFixed(2));
+                } 
+            </script>
+
+            <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/black-tie/jquery-ui.min.css" integrity="sha512-04r7Y8N4Th7VJ+qG+4aBVIV8AQkP7MJi55IDI4dGTY00PjvwO4Ea7gz+f5WhtJascgU+e9X1R+phkyVwZVpYmQ==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+            <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/humanity/jquery-ui.min.css" integrity="sha512-O+XbCAKBHqaqDVUD3wwoJtVV6kQA4DjkH2JnsVohO7BTtH2Ko4rrZ7zq8MqEeGg7Hv4MVZEOs7AF3iPzsLyxsA==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/start/jquery-ui.min.css" integrity="sha512-KDGSSta7IaYfwbcvWDYRF5HpeDaFOax4s/Z8sgQIw4CoI6fBAoTo07R4BOfGilFjQPPcmXll6slg8brFUmGCfQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            
+
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js" integrity="sha512-0bEtK0USNd96MnO4XhH8jhv3nyRF0eK87pJke6pkYf3cM0uDIhNJy9ltuzqgypoIFXw3JSuiy04tVk4AjpZdZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+            <style>
+                table.custom-table > tbody > tr > td:nth-of-type(1) {
+                    width: 4.5cm;
+                }
+
+                table.custom-table > tbody > tr > td:nth-of-type(3) {
+                    width: 1.5cm;
+                    text-align: right;
+                }
+
+                .slider-class {
+                    position: relative;top:50%;transform: translateY(25%); width: 100%;
+                }
+
+            </style>
+{% endmacro %}
+
+
+
+<!-- Render the main view port -->
+{% macro render_main_screen() -%}
+    <div id="song_select_screen" class="w3-display-middle w3-mobile w3-animate-opacity" style="display: none;width: 15cm;">
+        <div id="selectForm" class="w3-container">
+            <p><b class="w3-text-white">Artist</b></p>
+            
+            <select name="Artist" id="Artist" class="w3-select" onchange="changeRagas();">
+            </select>
+            
+            
+            <b class="w3-text-white">Raga</b>
+            <select id="Raga" name="Raga" class="w3-select" onchange="changeSongs();">
+            </select>
+            
+            <b class="w3-text-white">Song</b>
+            <select id="Song" name="Song" class="w3-select" onchange="changeTonic();">
+            </select>
+            
+            <b class="w3-text-white">Tonic</b>
+            <input type="number" class="w3-input" step="any" name="Tonic" id="Tonic" min="65" max="1000" value="130.81">
+            <p><b class="w3-text-white">Optional Download (it may increase waiting time)</b></p>
+            <input type="checkbox" class="w3-check" name="DownloadBeats" id="DownloadBeats" value="DownloadBeats" checked> <label for="DownloadBeats">Instrument track</label>
+
+            <p><button class="w3-button w3-red w3-hover-red  w3-ripple" id="songSelectScreenStartButton">Start</button></p>
+        
+        </div>
+    </div>
+    
+    <div id="play_original" class="w3-mobile w3-container w3-display-middle w3-animate-opacity" style="width: 15cm;display: none;">
+        <div class="w3-center" style="width: 100%;">
+            <h3 class="w3-text-white" style="position: relative;bottom: 1.5cm;">Listen to the original song</h3>
+        </div>
+        <audio id="play_original_audio" controls style="width: 100%;"></audio>
+        <br>
+        <form class="w3-container">
+
+            <p>Specify start and end time</p>
+                <div id="slider" style="width:100%;"></div>
+            <div class="w3-display-container w3-container" style="width: 100%;height: 1cm;">
+                <div class="w3-display-left w3-cell">
+                    <div style="text-align:left" id="strip_start">00:00:00</div>
+                </div>
+                <div class="w3-display-right w3-cell w3-center">
+                    <div style="text-align:right" id="strip_end">00:00:00</div>
+                </div>
+            </div>
+            <p>Or</p>
+            <p>Select a part for rehearsal</p>
+            <select name="songPartSel" id="songPartSel" class="w3-select" onchange="changeSongPart(this)">
+
+            </select>
+
+        </form>
+        <div class="w3-center" style="position: relative; top:1cm;">
+            <p><button class="w3-button w3-red w3-hover-red  w3-ripple" id="playOriginalNextButton">Next</button></p>
+        </div>
+        
+    </div>
+
+    <div id="score_screen" class="w3-mobile w3-container w3-display-middle w3-animate-opacity" style="width: 15cm;display: none;">
+        <div class="w3-center" style="width: 100%;">
+            <div class="w3-text-white" style="position: relative;bottom: 1.5cm;">
+                <h3>Score board</h3>
+                <div class="w3-container">
+                    <p>Score: <span id="scoreDisplay">100</span></p>
+                    <p>Grade: <span id="gradeDisplay">A++</span></p>
+                </div>
+                <div class="w3-center" style="position: relative; top:1cm;">
+                    <p><button class="w3-button w3-red w3-hover-red  w3-ripple" id="retryButton">Retry</button></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="w3-center" style="position: relative; top:0.5cm;">
+            <p>Please take this <a href="https://forms.gle/XXYhcviV4V62C8fB8" target="_blank" class="w3-button w3-teal w3-ripple w3-hover-teal">Survey</a> to rate Hemavathi</p>
+        </div>
+
+    </div>
+
+    <div id="playground" class="w3-mobile w3-display-middle  w3-animate-opacity" style="width: 15cm;display: none;">
+        <div class="w3-mobile">
+            <div id="plotMe" style="width: 15cm;height: 6cm;"></div>
+        </div>
+
+        <br>
+        <div id="playground_audio_controls" class="w3-container">
+            <p><input type="range" id="audioPlayerSeekBar" min="0" max="100" value="0" step="any" disabled style="width: 100%;"></p>
+            <div class="w3-display-container w3-container" style="width: 100%;height: 1cm;">
+                <div class="w3-display-left w3-cell">
+                    <button class="w3-button w3-red w3-hover-red w3-center w3-ripple" id="playPause" style="width: 2cm;">Record</button>
+                </div>
+                <div class="w3-display-middle w3-cell w3-cell-center">
+                    <p class="w3-text-white" id="timer_text">00:00:00</p>
+                </div>
+                <div class="w3-display-right w3-cell w3-center">
+                    <button class="w3-button w3-blue-gray w3-hover-blue-grey w3-ripple w3-center" style="width: 2cm;" id="reset">Stop</button>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div id="playground_checks" class="w3-container">
+            <p><b class="w3-text-white">Control what to play</b></p>
+            <table class="custom-table w3-mobile">
+                <tr>
+                    <td><label for="instrumentSlider">Instrument track</label></td>
+                    <td><input type="range" min="0" max="1" step="0.01" value="0.40" class="slider-class" id="instrumentSlider" disabled> </td> 
+                    <td id="instrumentSliderValueDisplay"><script>toFixedPoint('instrumentSlider')</script></td>
+                </tr>
+                <tr style="display: none;">
+                    <td><label for="pinknoiseSlider">Pink noise</label></td>
+                    <td><input type="range" min="0" max="1" step="0.01" value="0.01" class="slider-class" id="pinknoiseSlider" > </td>
+                    <td id="pinknoiseSliderValueDisplay"><script>toFixedPoint('pinknoiseSlider')</script></td>
+                </tr>
+                <tr>
+                    <td><label for="feedbackSlider">Recording feedback</label></td>
+                    <td><input type="range" min="0" max="1" step="0.01" value="0.05" class="slider-class" id="feedbackSlider" > </td>
+                    <td id="feedbackSliderValueDisplay"><script>toFixedPoint("feedbackSlider")</script></td>
+                </tr>
+                <tr>
+                    <td><label for="synthSlider">Synthesized audio</label></td>
+                    <td><input type="range" min="0" max="1" step="0.01" value="0.60" class="slider-class" id="synthSlider"></td>
+                    <td id=synthSliderValueDisplay><script>toFixedPoint('synthSlider')</script></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{% endmacro %}
+
+
+<!-- To Add specific static scripts to the end of page -->
+{% macro render_end() -%}
+    <script>
+        state.default_screen = "song_select_screen";
+
+        //Keep the order fixed for now.
+        scripts_to_load=[
+            "/static/JS/index.js",
+            "/static/JS/recorder/recorder.js",
+            "/static/JS/essentia/essentia-wasm.web.js",
+            "/static/JS/essentia/essentia.js-core.js",  
+            "https://cdn.plot.ly/plotly-basic-latest.min.js",
+            "/static/JS/jsstore/jsstore.min.js",
+            // "https://cdn.jsdelivr.net/npm/essentia.js@0.1.0/dist/essentia.js-plot.js",
+            // "https://cdn.jsdelivr.net/npm/essentia.js@0.1.0/dist/essentia.js-extractor.js",
+        ];
+        
+    </script>
+{%- endmacro %}

@@ -1,0 +1,3 @@
+# emcc -O3 hello.c -lidbfs.js -o hello.js -s FORCE_FILESYSTEM=1  -s EXPORTED_FUNCTIONS=[_myFunction] -s EXPORTED_RUNTIME_METHODS=[ccall,cwrap,setValue,free,allocate,intArrayFromString]
+
+emcc -O3 hello.c synth.c semitoneToSynth.c -lworkerfs.js -o hello.js -s FORCE_FILESYSTEM=1  -s EXPORTED_FUNCTIONS=[_myFunction,_synth,_semitoneToSynth] -s EXPORTED_RUNTIME_METHODS=[ccall,cwrap,setValue,free,allocate,intArrayFromString]

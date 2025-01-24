@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <script src="hello.js"></script>
+    </head>
+    <body>  
+        <script>
+
+                workerReadyEvent = new CustomEvent("worker_ready");
+                wasmWorker = new Worker('/wasm/worker.js');
+                wasmWorker.onmessage = async function(event){
+                    let e = event.data
+                    switch(e.eventType)
+                    {
+                        case "ready":
+                            handleWorkerReadyEvent(e);
+                            break;
+                    } 
+                }
+
+                async function handleWorkerReadyEvent(e)
+                {
+                        if(e.data)
+                        {
+                            dispatchEvent(workerReadyEvent);
+                        }
+                        else
+                        {
+                            await sleep(100);
+                            initWorker();
+                        }
+                }
+                
+                function initWorker(){
+                    wasmWorker.postMessage({
+                        eventType:"init",
+                    });
+                }
+                
+                initWorker();
+
+                mypromise = new Promise(resolve=>addEventListener("worker_ready",resolve));
+                await mypromise;
+                
+        </script>
+    </body>
+</html>

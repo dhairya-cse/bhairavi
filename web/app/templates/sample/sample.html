@@ -1,0 +1,36 @@
+{%- import "backend/macros.html" as macros -%}
+{%- extends "backend/base.html" -%}
+
+
+<!-- Provide variable to other files, specify scripts to be downloaded with the app -->
+{%- block prepare -%}
+    {{super()}}
+    {%- set gj.render_head=render_head -%}
+    {%- set gj.render_main_screen=render_main_screen -%}
+    {%- set gj.render_end=render_end -%}
+{%- endblock -%}
+
+
+<!-- To add something in head specific to the page -->
+{% macro render_head() -%}
+            
+{% endmacro %}
+
+
+
+<!-- Render the main view port -->
+{% macro render_main_screen() -%}
+
+{% endmacro %}
+
+
+<!-- Specify the scripts to be loaded with promises, the entry point is defined in ${file}.js for ${file}.html -->
+{% macro render_end() -%}
+    <script>
+        state.default_screen = "waiting_screen";
+
+        scripts_to_load=[
+            "static/JS/sample/sample.js",
+        ];
+    </script>
+{% endmacro %}

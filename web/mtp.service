@@ -1,0 +1,15 @@
+[Unit]
+Description=Start hemavathi server
+After=network.target
+
+[Service]
+User=gohan
+Group=apache
+WorkingDirectory=/home/gohan/hemavathi/web
+ExecStart=/home/gohan/miniconda3/envs/tempenv/bin/gunicorn --bind unix:/run/hemavathi.sock wsgi:webapp --limit-request-line 0 --workers=8 --reload -m 007
+ExecReload=/bin/kill -HUP $MAINPID 
+Restart=on-failure
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target

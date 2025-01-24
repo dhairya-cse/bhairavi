@@ -1,0 +1,40 @@
+{%- macro empty() -%}
+{%- endmacro -%}
+
+{% macro render_json(obj) -%}
+{{obj|tojson|safe}}                
+{%- endmacro %}
+
+
+{% macro render_message(err,type) -%}
+        <script>
+        {% if type %}
+                messages.push({{render_json([err,type])}}); 
+        {% else %}
+                messages.push({{render_json(err)}});  
+        {% endif %}
+        </script>
+{%- endmacro %}
+
+{% macro render_error2(err) -%}
+<div class="w3-panel w3-red w3-display-container  w3-animate-opacity">
+    <span onclick="this.parentElement.style.display='none'"
+    class="w3-button w3-opacity-min w3-display-topright">&times;</span>
+    <p>{{err}}</p>
+</div>
+{%- endmacro %}
+
+{% macro render_error3(err) -%}
+        <span class="w3-text-red">{{err}}</span>
+{%- endmacro %}
+
+{% macro render_field(field) %}
+        <b class="w3-text-white">{{ field.label }}</b>
+        {{ field(class="w3-input",**kwargs)|safe }}
+        {% if field.errors %}
+            {% for error in field.errors %}
+                {{render_error3(error)}}
+            {% endfor %}
+        {% endif %}
+{% endmacro %}
+
