@@ -17,7 +17,7 @@ required_packages = ["flask","spleeter","ftransc"]
 
 
 #Tweaks
-ENV_NAME = "tempenv"        #TODO: Change to hemavati (put a unique name for the virtual enviroment)
+ENV_NAME = "bhairavi"
 PYTHON_VER = "3.8.8"
 
     

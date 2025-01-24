@@ -8,7 +8,7 @@ The development is done on x86-x64 architecture based machine running Linux mint
 - [miniconda](https://docs.conda.io/en/latest/miniconda.html)
 
 After installing the above dependencies, perform the following steps: 
-- Run scripts/setup.py, change the variable `ENV_NAME='tempenv'`, if the  environment name is already in use.
+- Run scripts/setup.py, change the variable `ENV_NAME='bhairavi'`, if the  environment name is already in use.
 
 ### Dataset
 Every song in the database has a directory descibed as following path: 
