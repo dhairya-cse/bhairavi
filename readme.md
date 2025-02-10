@@ -8,9 +8,12 @@ Read more about the project in my [Mtech thesis](https://drive.google.com/file/d
 All the song files should be put in the following structure in a ${DATA_DIR} directory.
 *`${DATA_DIR}/SongDB/<artistName>/<songName>`*
 
----
+
+--
+
 `scripts/download.py` is an extension to download the files from [RagaDataset](https://drive.google.com/drive/u/0/folders/0Bz-I9QJ1cL6aTG93WDgycXhsN1U?resourcekey=0-kbh_wyoZhiUjwRBtHi_oVg) provided by [compmusic](https://compmusic.upf.edu/) for Carantic music. I have used [drive](https://github.com/odeke-em/drive) package to download the songs in `gdrive` folder and then arrange them according to directory strucutre given above.
----
+
+--
 
 ### Preparation
 
